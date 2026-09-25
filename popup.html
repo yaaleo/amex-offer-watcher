@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Amex Offer Watcher</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <main>
+      <header>
+        <div class="mark">AMEX</div>
+        <div>
+          <h1>Amex Offer Watcher</h1>
+          <p>内置 Exact Offer 读取，不依赖篡改猴，也不填写申请。</p>
+          <small id="version-label">版本检查中…</small>
+        </div>
+      </header>
+
+      <section class="status-card">
+        <div class="status-row">
+          <span id="status-dot" class="dot"></span>
+          <strong id="status-title">读取状态中…</strong>
+        </div>
+        <p id="status-message">—</p>
+        <dl>
+          <div><dt>已尝试</dt><dd id="attempt">0</dd></div>
+          <div>
+            <dt>上次结果</dt>
+            <dd id="last-offer">—</dd>
+            <small id="last-offer-source">尚未提取</small>
+          </div>
+          <div><dt>连续未读取</dt><dd id="timeout-streak">0</dd></div>
+        </dl>
+      </section>
+
+      <section id="notification-card" class="notification-card">
+        <strong>提醒状态</strong>
+        <p id="notification-status">尚未发送提醒</p>
+      </section>
+
+      <section class="history-card">
+        <div class="history-heading">
+          <h2>历史记录</h2>
+          <button id="clear-history" class="text-button">清空</button>
+        </div>
+        <div id="history-list" class="history-list">
+          <p class="empty-history">升级后产生的逐轮结果会显示在这里。</p>
+        </div>
+      </section>
+
+      <label>
+        <span>Amex 申请链接</span>
+        <input
+          id="target-url"
+          type="url"
+          spellcheck="false"
+          value="https://americanexpress.com/en-us/referral/business-platinum-charge-card?ref=AOYaLvIsS&amp;XLINK=MYCP"
+        />
+      </label>
+      <p class="field-hint">支持 americanexpress.com 的推荐页、信用卡产品页和申请页。</p>
+
+      <label>
+        <span>目标奖励数值（达到或超过即停止）</span>
+        <input id="target-amount" type="number" min="1" step="1" value="300000" />
+      </label>
+      <p class="field-hint">例如 300000 积分、90000 里程或 250 美元返现，按条款中的主要奖励数值比较。</p>
+
+      <label>
+        <span>每轮间隔（秒，最少 5 秒）</span>
+        <input id="delay" type="number" min="5" max="600" value="12" />
+      </label>
+
+      <label>
+        <span>连续超时提醒阈值（2–20 次）</span>
+        <input id="timeout-threshold" type="number" min="2" max="20" value="3" />
+      </label>
+
+      <p class="background-note">扩展会另外新建并只管理自己的后台无痕窗口；已有无痕窗口不受影响。只有达到你设置的目标时才会显示到前台。</p>
+
+      <details>
+        <summary>可选：手机 ntfy 提醒</summary>
+        <p class="hint">
+          手机安装 ntfy 并订阅同名主题。主题应使用随机且不公开的字符串。
+        </p>
+        <label>
+          <span>ntfy.sh 主题</span>
+          <input id="ntfy-topic" type="text" placeholder="例如 amex-3f9c…" />
+        </label>
+        <button id="test-notify" class="secondary">测试电脑和手机提醒</button>
+      </details>
+
+      <div class="actions">
+        <button id="start" class="primary">开始</button>
+        <button id="stop" class="danger">停止</button>
+      </div>
+
+      <p id="action-message" class="action-message"></p>
+    </main>
+    <script src="popup.js"></script>
+  </body>
+</html>

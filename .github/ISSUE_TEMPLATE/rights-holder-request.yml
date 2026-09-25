@@ -1,0 +1,44 @@
+name: "Rights Holder Request / 权利人请求"
+description: "Request review of content affecting legal or intellectual-property rights / 请求审查可能影响合法权益或知识产权的内容"
+title: "[Rights Holder Request / 权利人请求] "
+labels:
+  - rights-holder-request
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please do not include personal, financial, authentication, or other confidential information in this public form.
+        请勿在此公开表单中填写个人、财务、身份验证信息或其他机密内容。
+  - type: input
+    id: organization
+    attributes:
+      label: "Rights holder or organization / 权利人或机构"
+    validations:
+      required: true
+  - type: input
+    id: material
+    attributes:
+      label: "Affected material / 涉及内容"
+      description: "Provide repository paths or public URLs only. / 仅提供仓库路径或公开网址。"
+    validations:
+      required: true
+  - type: textarea
+    id: basis
+    attributes:
+      label: "Basis of request / 请求依据"
+      description: "Explain the relevant right, policy, or rule. / 请说明相关权利、政策或规则。"
+    validations:
+      required: true
+  - type: textarea
+    id: remedy
+    attributes:
+      label: "Requested action / 请求采取的措施"
+    validations:
+      required: true
+  - type: checkboxes
+    id: accuracy
+    attributes:
+      label: "Certification / 确认"
+      options:
+        - label: "I confirm that this request is accurate to the best of my knowledge. / 我确认本请求据我所知准确无误。"
+          required: true
