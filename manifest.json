@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Amex Offer Watcher",
-  "version": "1.9.4",
+  "version": "1.9.5",
   "description": "根据用户提供的 Amex 链接读取 Exact Welcome Offer，并在达到自定义目标时停止。",
   "incognito": "spanning",
   "permissions": [

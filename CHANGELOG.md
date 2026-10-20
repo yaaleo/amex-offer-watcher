@@ -1,5 +1,17 @@
 # 更新日志 / Changelog
 
+## 1.9.5 — 2026-10-20
+
+### 中文
+
+- 删除金额消息的纯数字兜底：缺少精确 Offer 原文、或原文含 `As High As` / `Up to` 时，不会记录为成功或发送命中通知。
+- 增加消息处理回归测试，防止 AHA 文案被数字字段重新判成精确奖励。
+
+### English
+
+- Removed the numeric-only offer-message fallback. Missing exact-offer text and promotional `As High As` / `Up to` text cannot produce a successful result or target notification.
+- Added message-handler regression coverage to prevent numeric fields from overriding rejected promotional wording.
+
 ## 1.9.4 — 2026-09-24
 
 ### 中文

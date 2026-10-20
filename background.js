@@ -742,20 +742,9 @@ async function handleOfferUnavailable(message, sender) {
 
 function parseOfferMessage(message = {}) {
   const offerText = String(message.offerText || "").trim();
-  const parsed = AmexOfferParser.parseOfferDetails(offerText);
-  if (parsed) return parsed;
-
-  const amount = Number(String(message.offer ?? "").replace(/[^\d.]/g, ""));
-  if (!Number.isFinite(amount) || amount <= 0) return null;
-  const rewardUnit = String(message.rewardUnit || "奖励").trim();
-  return {
-    amount,
-    offerText: offerText || `${amount.toLocaleString("en-US")} ${rewardUnit}`,
-    rewardUnit,
-    displayValue:
-      String(message.displayValue || "").trim() ||
-      `${amount.toLocaleString("en-US")} ${rewardUnit}`
-  };
+  // The amount must come from validated exact-offer text. Falling back to
+  // message.offer here would turn rejected AHA copy into a success again.
+  return AmexOfferParser.parseOfferDetails(offerText);
 }
 
 function validateExactOfferUrl(value) {

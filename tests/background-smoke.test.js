@@ -76,7 +76,7 @@ const chrome = {
     async sendMessage() {}
   },
   runtime: {
-    getManifest() { return { version: "1.9.4" }; },
+    getManifest() { return { version: "1.9.5" }; },
     onMessage: {
       addListener(listener) { onMessage = listener; }
     },
@@ -137,6 +137,30 @@ function send(message, sender = {}) {
   );
 
   const sender = { tab: { id: 11, windowId: 101, incognito: true } };
+  // A numeric amount must never rescue missing or promotional offer text.
+  // This exercises the real message handler, including its success decision.
+  for (const offerText of [
+    "",
+    "As High As 300,000 Membership Rewards Points",
+    "Earn up to 300,000 Membership Rewards Points"
+  ]) {
+    await send({
+      type: "offer-found",
+      offer: 300000,
+      offerText,
+      rewardUnit: "Membership Rewards Points",
+      source: "内置 Offer Terms 读取器",
+      evidence: "background-exact-offer-terms"
+    }, sender);
+    assert.equal(
+      store.running,
+      true,
+      `missing or AHA offer text must not stop the run: ${offerText || "numeric only"}`
+    );
+    assert.equal(store.history.length, 0, "an unverified amount must not enter offer history");
+    assert.equal(notifications.length, 0, "an unverified amount must not send a success notification");
+  }
+
   const result = await send({
     type: "offer-found",
     offer: 130000,
@@ -223,7 +247,30 @@ function send(message, sender = {}) {
   assert.equal(store.history[0].source, "Amex 申请流程");
   assert.match(store.history[0].detail, /不会填写或提交申请/);
 
-  console.log("background success, error-page retry, and unavailable-offer tests passed");
+  await send({ type: "clear-history" });
+  const exactRun = await send({
+    type: "start",
+    config: {
+      targetUrl: "https://www.americanexpress.com/us/credit-cards/business/business-credit-cards/american-express-business-platinum-credit-card-amex/",
+      targetAmount: 300000,
+      delaySeconds: 5,
+      ntfyTopic: ""
+    }
+  });
+  assert.equal(exactRun.ok, true);
+  await send({
+    type: "offer-found",
+    offer: 250000,
+    offerText: "Earn 300,000 Membership Rewards Points",
+    cardName: "Business Platinum Card",
+    source: "内置 Offer Terms 读取器",
+    evidence: "background-exact-offer-terms"
+  }, { tab: { id: 14, windowId: store.ownedWindowId, incognito: true } });
+  assert.equal(store.phase, "success", "an exact 300k text must still reach the target");
+  assert.match(store.history[0].detail, /^Earn 300,000 /);
+  assert.equal(store.history[0].status, "success");
+
+  console.log("background exact-offer validation, success, error-page retry, and unavailable-offer tests passed");
 })().catch((error) => {
   console.error(error);
   process.exitCode = 1;
