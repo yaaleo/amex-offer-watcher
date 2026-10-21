@@ -1,5 +1,19 @@
 # 更新日志 / Changelog
 
+## 1.9.5.1 — 2026-10-20
+
+### 中文
+
+- 修复 1.9.5 发布包弹窗仍硬编码为 1.9.4，导致点击图标后重载并立即关闭的问题。
+- 弹窗版本号改为读取 manifest.json，后续更新不再需要手动同步第二个版本号。
+- 保持 1.9.5 的 Offer 读取、无痕重试和通知流程不变。
+
+### English
+
+- Fixed the v1.9.5 package's stale v1.9.4 popup version check, which reloaded the extension and closed its popup on every click.
+- The popup now reads its version from manifest.json, eliminating the duplicate manual version constant.
+- Preserved the v1.9.5 offer-reading, incognito retry, and notification behavior.
+
 ## 1.9.5 — 2026-10-20
 
 ### 中文

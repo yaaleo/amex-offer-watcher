@@ -1,5 +1,5 @@
 const $ = (selector) => document.querySelector(selector);
-const EXPECTED_RUNTIME_VERSION = "1.9.4";
+const EXPECTED_RUNTIME_VERSION = chrome.runtime.getManifest().version;
 
 // Exposes only the extension version to the page DOM for local diagnostics.
 // Opening the private reload hash lets the extension reload itself without
